@@ -21,7 +21,7 @@ func init() {
 // @title Kubernetes API
 // @version 1.0
 // @description List of kubernetes API
-// @host localhost:8080
+// @host grotesque-vivianne-splendid-ab71dd99.koyeb.app
 // @BasePath /
 func main() {
 	server.GET("/sitemap", sitemap.ValidateSitemapURL(), sitemap.ScrapeSitemap)
