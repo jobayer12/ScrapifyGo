@@ -11,7 +11,7 @@ definitions:
       priority:
         type: string
     type: object
-host: localhost:8080
+host: grotesque-vivianne-splendid-ab71dd99.koyeb.app
 info:
   contact: {}
   description: List of kubernetes API
