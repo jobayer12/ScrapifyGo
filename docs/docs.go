@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/sitemap": {
             "get": {
-                "description": "Return sitemap url list",
+                "description": "Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml",
                 "produces": [
                     "application/json"
                 ],
@@ -40,7 +40,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/sitemap.URL"
+                                "$ref": "#/definitions/sitemap.url_scrape"
                             }
                         }
                     }
@@ -49,7 +49,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "sitemap.URL": {
+        "sitemap.url_scrape": {
             "type": "object",
             "properties": {
                 "changefreq": {
@@ -72,7 +72,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "grotesque-vivianne-splendid-ab71dd99.koyeb.app",
+	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Kubernetes API",

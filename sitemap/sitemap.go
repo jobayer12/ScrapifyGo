@@ -17,7 +17,7 @@ type URL struct {
 	Priority   string `xml:"priority,omitempty" json:"priority,omitempty"`
 }
 
-type Index struct {
+type URLSet struct {
 	URLs []URL `xml:"url"`
 }
 
@@ -25,14 +25,14 @@ func ValidateSitemapURL() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		sitemapURL := c.Query("url")
 		if sitemapURL == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "URL parameter is required"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "url_scrape parameter is required"})
 			c.Abort()
 			return
 		}
 
-		// Check if URL ends with "sitemap.xml".
+		// Check if url_scrape ends with "sitemap.xml".
 		if !strings.HasSuffix(sitemapURL, "sitemap.xml") {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "URL must end with sitemap.xml"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "url_scrape must end with sitemap.xml"})
 			c.Abort()
 			return
 		}
@@ -41,7 +41,7 @@ func ValidateSitemapURL() gin.HandlerFunc {
 		resp, err := http.Head(sitemapURL)
 		if err != nil {
 			log.Printf("HEAD request failed: %v", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to verify sitemap URL"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to verify sitemap url_scrape"})
 			c.Abort()
 			return
 		}
@@ -50,7 +50,7 @@ func ValidateSitemapURL() gin.HandlerFunc {
 		// Check if the content type is XML.
 		contentType := resp.Header.Get("Content-Type")
 		if !strings.Contains(contentType, "xml") {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "URL does not point to a valid sitemap (invalid content type)"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "url_scrape does not point to a valid sitemap (invalid content type)"})
 			c.Abort()
 			return
 		}
@@ -61,7 +61,7 @@ func ValidateSitemapURL() gin.HandlerFunc {
 
 // ScrapeSitemap godoc
 // @Summary			Get the sitemap url list
-// @Description		Return sitemap url list
+// @Description		Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml
 // @Tags			sitemap
 // @Router			/sitemap [get]
 // @Param 			url query string true "url"
@@ -70,7 +70,7 @@ func ValidateSitemapURL() gin.HandlerFunc {
 func ScrapeSitemap(c *gin.Context) {
 	sitemapURL := c.Query("url")
 	if sitemapURL == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "URL parameter is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "url_scrape parameter is required"})
 		return
 	}
 
@@ -81,7 +81,7 @@ func ScrapeSitemap(c *gin.Context) {
 
 	// On XML response, parse the XML.
 	collector.OnResponse(func(r *colly.Response) {
-		var sitemap Index
+		var sitemap URLSet
 		err := xml.Unmarshal(r.Body, &sitemap)
 		if err != nil {
 			log.Printf("Failed to unmarshal XML: %v", err)
@@ -91,19 +91,11 @@ func ScrapeSitemap(c *gin.Context) {
 		urls = sitemap.URLs
 	})
 
-	// Error handling.
-	collector.OnError(func(_ *colly.Response, err error) {
-		log.Printf("Request failed: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to scrape sitemap URL"})
-		c.Abort()
-		return
-	})
-
-	// Visit the sitemap URL.
+	// Visit the sitemap url_scrape.
 	err := collector.Visit(sitemapURL)
 	if err != nil {
-		log.Printf("Failed to visit URL: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to visit sitemap URL"})
+		log.Printf("Failed to visit url_scrape: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to visit sitemap url_scrape"})
 		c.Abort()
 		return
 	}

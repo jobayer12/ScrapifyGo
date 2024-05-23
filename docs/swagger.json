@@ -6,12 +6,12 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "grotesque-vivianne-splendid-ab71dd99.koyeb.app",
+    "host": "localhost:8080",
     "basePath": "/",
     "paths": {
         "/sitemap": {
             "get": {
-                "description": "Return sitemap url list",
+                "description": "Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml",
                 "produces": [
                     "application/json"
                 ],

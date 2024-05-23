@@ -11,7 +11,7 @@ definitions:
       priority:
         type: string
     type: object
-host: grotesque-vivianne-splendid-ab71dd99.koyeb.app
+host: localhost:8080
 info:
   contact: {}
   description: List of kubernetes API
@@ -20,7 +20,7 @@ info:
 paths:
   /sitemap:
     get:
-      description: Return sitemap url list
+      description: 'Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml'
       parameters:
       - description: url
         in: query
