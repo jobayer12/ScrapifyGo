@@ -1,0 +1,64 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "List of kubernetes API",
+        "title": "Kubernetes API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/sitemap": {
+            "get": {
+                "description": "Return sitemap url list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sitemap"
+                ],
+                "summary": "Get the sitemap url list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/sitemap.URL"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "sitemap.URL": {
+            "type": "object",
+            "properties": {
+                "changefreq": {
+                    "type": "string"
+                },
+                "lastmod": {
+                    "type": "string"
+                },
+                "loc": {
+                    "type": "string"
+                },
+                "priority": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
