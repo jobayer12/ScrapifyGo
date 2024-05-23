@@ -1,0 +1,42 @@
+basePath: /
+definitions:
+  sitemap.URL:
+    properties:
+      changefreq:
+        type: string
+      lastmod:
+        type: string
+      loc:
+        type: string
+      priority:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: List of kubernetes API
+  title: Kubernetes API
+  version: "1.0"
+paths:
+  /sitemap:
+    get:
+      description: Return sitemap url list
+      parameters:
+      - description: url
+        in: query
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/sitemap.URL'
+            type: array
+      summary: Get the sitemap url list
+      tags:
+      - sitemap
+swagger: "2.0"
