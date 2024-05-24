@@ -11,6 +11,8 @@ definitions:
       priority:
         type: string
     type: object
+  url.Response:
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -18,7 +20,7 @@ info:
   title: Kubernetes API
   version: "1.0"
 paths:
-  /sitemap:
+  /api/v1/sitemap:
     get:
       description: 'Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml'
       parameters:
@@ -39,4 +41,44 @@ paths:
       summary: Get the sitemap url list
       tags:
       - sitemap
+  /api/v1/url:
+    get:
+      description: 'Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml'
+      parameters:
+      - description: url
+        in: query
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/url.Response'
+      summary: Get the sitemap url list
+      tags:
+      - sitemap
+  /email:
+    get:
+      description: Return sitemap url list.
+      parameters:
+      - description: url
+        in: query
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: Get the email list
+      tags:
+      - email
 swagger: "2.0"

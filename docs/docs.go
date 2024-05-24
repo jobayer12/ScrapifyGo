@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/sitemap": {
+        "/api/v1/sitemap": {
             "get": {
                 "description": "Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml",
                 "produces": [
@@ -40,7 +40,68 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/sitemap.url_scrape"
+                                "$ref": "#/definitions/sitemap.URL"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/url": {
+            "get": {
+                "description": "Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sitemap"
+                ],
+                "summary": "Get the sitemap url list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/url.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/email": {
+            "get": {
+                "description": "Return sitemap url list.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "email"
+                ],
+                "summary": "Get the email list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
                             }
                         }
                     }
@@ -49,7 +110,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "sitemap.url_scrape": {
+        "sitemap.URL": {
             "type": "object",
             "properties": {
                 "changefreq": {
@@ -65,6 +126,9 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "url.Response": {
+            "type": "object"
         }
     }
 }`

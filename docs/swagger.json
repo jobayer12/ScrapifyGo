@@ -9,7 +9,7 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/sitemap": {
+        "/api/v1/sitemap": {
             "get": {
                 "description": "Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml",
                 "produces": [
@@ -40,6 +40,67 @@
                     }
                 }
             }
+        },
+        "/api/v1/url": {
+            "get": {
+                "description": "Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sitemap"
+                ],
+                "summary": "Get the sitemap url list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/url.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/email": {
+            "get": {
+                "description": "Return sitemap url list.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "email"
+                ],
+                "summary": "Get the email list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -59,6 +120,9 @@
                     "type": "string"
                 }
             }
+        },
+        "url.Response": {
+            "type": "object"
         }
     }
 }

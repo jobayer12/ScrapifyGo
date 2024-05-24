@@ -1,1 +1,1 @@
-# scrape-google-search
+# ScrapifyGo

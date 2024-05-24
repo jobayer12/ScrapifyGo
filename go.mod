@@ -1,4 +1,4 @@
-module github.com/jobayer12/scrape-google-search
+module github.com/jobayer12/ScrapifyGo
 
 go 1.21.1
 
