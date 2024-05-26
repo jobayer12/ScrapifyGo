@@ -20,9 +20,9 @@ func init() {
 	server.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
-// @title			Kubernetes API
+// @title			Scrape API
 // @version		1.0
-// @description	List of kubernetes API
+// @description	List of Scrape API
 // @host			slight-tiffie-splendid-1fcf1fda.koyeb.app
 // @BasePath		/
 func main() {
