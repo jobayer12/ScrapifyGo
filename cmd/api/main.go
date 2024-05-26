@@ -15,6 +15,7 @@ var (
 )
 
 func init() {
+	gin.SetMode(gin.ReleaseMode)
 	server = gin.Default()
 	server.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
