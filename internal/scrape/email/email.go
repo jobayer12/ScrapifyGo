@@ -1,11 +1,9 @@
 package email
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gocolly/colly"
-	"github.com/jobayer12/ScrapifyGo/utils"
-	"log"
+	utils "github.com/jobayer12/ScrapifyGo/utils"
 	"net/http"
 	"regexp"
 )
@@ -15,9 +13,9 @@ import (
 //	@Summary		Get the email list
 //	@Description	Return sitemap url list.
 //	@Tags			email
-//	@Router			/email [get]
+//	@Router			/api/v1/email [get]
 //	@Param			url	query	string	true	"url"
-//	@Response		200	{array}	string
+//	@Response		200	{object} utils.APIResponse[[]string]
 //	@Produce		application/json
 func ScrapeEmail(c *gin.Context) {
 	url := c.Query("url")
@@ -29,16 +27,20 @@ func ScrapeEmail(c *gin.Context) {
 	// Create a new collector.
 	collector := colly.NewCollector(colly.AllowURLRevisit())
 
-	var emails []string
+	response := utils.APIResponse[[]string]{
+		Error:  "",
+		Status: http.StatusOK,
+		Data:   []string{},
+	}
 
 	collector.OnResponse(func(r *colly.Response) {
-		emails = extractUniqueEmails(string(r.Body))
+		response.Data = extractUniqueEmails(string(r.Body))
 	})
 
 	// Visit the sitemap url.
 	err := collector.Visit(url)
 	if err != nil {
-		log.Printf("Failed to visit url: %v", err)
+		response.Error = "Failed to visit the url due to: " + err.Error()
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to visit url"})
 		c.Abort()
 		return
@@ -47,11 +49,10 @@ func ScrapeEmail(c *gin.Context) {
 	// Wait until scraping is complete.
 	collector.Wait()
 
-	c.JSON(http.StatusOK, emails)
+	c.JSON(http.StatusOK, response)
 }
 
 func extractUniqueEmails(body string) []string {
-	fmt.Println(body)
 	// Define a regular expression pattern to match emails
 	emailPattern := regexp.MustCompile(`[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}`)
 

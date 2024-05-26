@@ -1,6 +1,28 @@
 basePath: /
 definitions:
-  sitemap.URL:
+  github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_internal_scrape_sitemap_URL:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/internal_scrape_sitemap.URL'
+        type: array
+      error:
+        type: string
+      status:
+        type: integer
+    type: object
+  github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string:
+    properties:
+      data:
+        items:
+          type: string
+        type: array
+      error:
+        type: string
+      status:
+        type: integer
+    type: object
+  internal_scrape_sitemap.URL:
     properties:
       changefreq:
         type: string
@@ -11,8 +33,6 @@ definitions:
       priority:
         type: string
     type: object
-  url.Response:
-    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -20,6 +40,25 @@ info:
   title: Kubernetes API
   version: "1.0"
 paths:
+  /api/v1/email:
+    get:
+      description: Return sitemap url list.
+      parameters:
+      - description: url
+        in: query
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string'
+      summary: Get the email list
+      tags:
+      - email
   /api/v1/sitemap:
     get:
       description: 'Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml'
@@ -35,32 +74,11 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/sitemap.URL'
-            type: array
+            $ref: '#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_internal_scrape_sitemap_URL'
       summary: Get the sitemap url list
       tags:
       - sitemap
   /api/v1/url:
-    get:
-      description: 'Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml'
-      parameters:
-      - description: url
-        in: query
-        name: url
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/url.Response'
-      summary: Get the sitemap url list
-      tags:
-      - sitemap
-  /email:
     get:
       description: Return sitemap url list.
       parameters:
@@ -75,10 +93,8 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              type: string
-            type: array
-      summary: Get the email list
+            $ref: '#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string'
+      summary: Get the sitemap url list
       tags:
-      - email
+      - url
 swagger: "2.0"

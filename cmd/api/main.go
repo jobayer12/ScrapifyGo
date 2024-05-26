@@ -19,11 +19,11 @@ func init() {
 	server.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
-//	@title			Kubernetes API
-//	@version		1.0
-//	@description	List of kubernetes API
-//	@host			localhost:8080
-//	@BasePath		/
+// @title			Kubernetes API
+// @version		1.0
+// @description	List of kubernetes API
+// @host			localhost:8080
+// @BasePath		/
 func main() {
 
 	api := server.Group("api")

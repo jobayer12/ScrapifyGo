@@ -15,6 +15,35 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/email": {
+            "get": {
+                "description": "Return sitemap url list.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "email"
+                ],
+                "summary": "Get the email list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sitemap": {
             "get": {
                 "description": "Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml",
@@ -38,10 +67,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/sitemap.URL"
-                            }
+                            "$ref": "#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_internal_scrape_sitemap_URL"
                         }
                     }
                 }
@@ -49,12 +75,12 @@ const docTemplate = `{
         },
         "/api/v1/url": {
             "get": {
-                "description": "Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml",
+                "description": "Return sitemap url list.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "sitemap"
+                    "url"
                 ],
                 "summary": "Get the sitemap url list",
                 "parameters": [
@@ -70,39 +96,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/url.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/email": {
-            "get": {
-                "description": "Return sitemap url list.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "email"
-                ],
-                "summary": "Get the email list",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "url",
-                        "name": "url",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string"
                         }
                     }
                 }
@@ -110,7 +104,41 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "sitemap.URL": {
+        "github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_internal_scrape_sitemap_URL": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_scrape_sitemap.URL"
+                    }
+                },
+                "error": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "error": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_scrape_sitemap.URL": {
             "type": "object",
             "properties": {
                 "changefreq": {
@@ -126,9 +154,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "url.Response": {
-            "type": "object"
         }
     }
 }`

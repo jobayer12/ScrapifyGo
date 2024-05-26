@@ -5,9 +5,10 @@ import (
 	"encoding/xml"
 	"github.com/gin-gonic/gin"
 	"github.com/gocolly/colly"
+	"github.com/jobayer12/ScrapifyGo/utils"
+	_ "github.com/jobayer12/ScrapifyGo/utils"
 	"log"
 	"net/http"
-	"strings"
 )
 
 type URL struct {
@@ -21,51 +22,14 @@ type URLSet struct {
 	URLs []URL `xml:"url"`
 }
 
-func ValidateSitemapURL() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		sitemapURL := c.Query("url")
-		if sitemapURL == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "url parameter is required"})
-			c.Abort()
-			return
-		}
-
-		// Check if url ends with "sitemap.xml".
-		if !strings.HasSuffix(sitemapURL, "sitemap.xml") {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "url must end with sitemap.xml"})
-			c.Abort()
-			return
-		}
-
-		// Send a HEAD request to check the content type.
-		resp, err := http.Head(sitemapURL)
-		if err != nil {
-			log.Printf("HEAD request failed: %v", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to verify sitemap url"})
-			c.Abort()
-			return
-		}
-		defer resp.Body.Close()
-
-		// Check if the content type is XML.
-		contentType := resp.Header.Get("Content-Type")
-		if !strings.Contains(contentType, "xml") {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "url does not point to a valid sitemap (invalid content type)"})
-			c.Abort()
-			return
-		}
-
-		c.Next()
-	}
-}
-
 // ScrapeSitemap godoc
+//
 //	@Summary		Get the sitemap url list
 //	@Description	Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml
 //	@Tags			sitemap
 //	@Router			/api/v1/sitemap [get]
 //	@Param			url	query	string	true	"url"
-//	@Response		200	{array}	URL
+//	@Response		200	{object}	_.APIResponse[[]URL]
 //	@Produce		application/json
 func ScrapeSitemap(c *gin.Context) {
 	sitemapURL := c.Query("url")
@@ -76,6 +40,12 @@ func ScrapeSitemap(c *gin.Context) {
 
 	// Create a new collector.
 	collector := colly.NewCollector(colly.AllowedDomains())
+
+	response := utils.APIResponse[[]URL]{
+		Error:  "",
+		Status: http.StatusOK,
+		Data:   []URL{},
+	}
 
 	var urls []URL
 
@@ -94,8 +64,9 @@ func ScrapeSitemap(c *gin.Context) {
 	// Visit the sitemap url.
 	err := collector.Visit(sitemapURL)
 	if err != nil {
-		log.Printf("Failed to visit url: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to visit sitemap url"})
+		response.Error = "Failed to parse sitemap XML" + err.Error()
+		response.Status = http.StatusInternalServerError
+		c.JSON(http.StatusInternalServerError, response)
 		c.Abort()
 		return
 	}
@@ -106,12 +77,22 @@ func ScrapeSitemap(c *gin.Context) {
 	// Convert the URLs to JSON.
 	jsonData, err := json.MarshalIndent(urls, "", "  ")
 	if err != nil {
-		log.Printf("Failed to marshal JSON: %v", err)
+		response.Error = "Failed to marshal JSON due to " + err.Error()
+		response.Status = http.StatusInternalServerError
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to marshal JSON"})
 		c.Abort()
 		return
 	}
 
-	// Return the JSON data.
-	c.Data(http.StatusOK, "application/json", jsonData)
+	err = json.Unmarshal(jsonData, &response.Data)
+
+	if err != nil {
+		response.Error = "Failed to marshal JSON due to " + err.Error()
+		response.Status = http.StatusInternalServerError
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to marshal JSON"})
+		c.Abort()
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
 }
