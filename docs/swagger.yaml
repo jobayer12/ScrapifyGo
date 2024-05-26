@@ -33,11 +33,11 @@ definitions:
       priority:
         type: string
     type: object
-host: localhost:8080
+host: slight-tiffie-splendid-1fcf1fda.koyeb.app
 info:
   contact: {}
-  description: List of kubernetes API
-  title: Kubernetes API
+  description: List of Scrape API
+  title: Scrape API
   version: "1.0"
 paths:
   /api/v1/email:
