@@ -45,7 +45,7 @@ Once the application is running, you can access the API endpoints to perform var
 
 ### 1. Scrape Sitemap Data
 
-- *Endpoint:* /api/v1/sitemap?url=http://example.com/sitemap.xml
+- *Endpoint:* /api/v1/sitemap?url=https://example.com/sitemap.xml
 - *Method:* GET
 - *Description:* Scrapes the sitemap data from a given URL.
 
@@ -68,7 +68,7 @@ Once the application is running, you can access the API endpoints to perform var
 
 ### 2. Scrape URL from Website
 
-- *Endpoint:* /api/v1/url?url=http://example.com/sitemap.xml
+- *Endpoint:* /api/v1/url?url=https://example.com
 - *Method:* GET
 - *Description:* Scrapes URLs from a given web page.
 
@@ -86,7 +86,7 @@ Once the application is running, you can access the API endpoints to perform var
 
 ### 3. Scrape Emails from URLs
 
-- *Endpoint:* /api/v1/email?url=http://example.com/sitemap.xml
+- *Endpoint:* /api/v1/email?url=https://example.com
 - *Method:* GET
 - *Description:* Scrapes email addresses from a list of URLs.
 
