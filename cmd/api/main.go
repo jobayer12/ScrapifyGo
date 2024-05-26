@@ -23,7 +23,7 @@ func init() {
 // @title			Kubernetes API
 // @version		1.0
 // @description	List of kubernetes API
-// @host			grotesque-vivianne-splendid-ab71dd99.koyeb.app
+// @host			slight-tiffie-splendid-1fcf1fda.koyeb.app
 // @BasePath		/
 func main() {
 
