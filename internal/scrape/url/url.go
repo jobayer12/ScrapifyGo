@@ -9,29 +9,29 @@ import (
 
 // UrlScrape godoc
 //
-//	@Summary		Get the sitemap url list
-//	@Description	Return sitemap url list.
+//	@Summary		Get the url list
 //	@Tags			url
 //	@Router			/api/v1/url [get]
 //	@Param			url	query		string	true	"url"
 //	@Response		200	{object} utils.APIResponse[[]string]
 //	@Produce		application/json
 func UrlScrape(c *gin.Context) {
+	response := utils.APIResponse[[]string]{
+		Error:  "",
+		Status: http.StatusOK,
+		Data:   []string{},
+	}
 	url := c.Query("url")
 	if url == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "url parameter is required"})
+		response.Status = http.StatusBadRequest
+		response.Error = "url parameter is required"
+		c.JSON(http.StatusBadRequest, response)
 		c.Abort()
 		return
 	}
 
 	// Create a new collector.
 	collector := colly.NewCollector()
-
-	response := utils.APIResponse[[]string]{
-		Error:  "",
-		Status: http.StatusOK,
-		Data:   []string{},
-	}
 
 	// OnHTML callback to scrape the URLs.
 	collector.OnHTML("html", func(e *colly.HTMLElement) {
@@ -46,9 +46,9 @@ func UrlScrape(c *gin.Context) {
 	// Visit the url.
 	err := collector.Visit(url)
 	if err != nil {
-		response.Status = http.StatusInternalServerError
+		response.Status = http.StatusBadRequest
 		response.Error = "Failed to visit the url due to: " + err.Error()
-		c.JSON(http.StatusInternalServerError, response)
+		c.JSON(http.StatusBadRequest, response)
 		c.Abort()
 		return
 	}

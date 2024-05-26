@@ -7,7 +7,6 @@ import (
 	"github.com/gocolly/colly"
 	"github.com/jobayer12/ScrapifyGo/utils"
 	_ "github.com/jobayer12/ScrapifyGo/utils"
-	"log"
 	"net/http"
 )
 
@@ -32,20 +31,24 @@ type URLSet struct {
 //	@Response		200	{object}	_.APIResponse[[]URL]
 //	@Produce		application/json
 func ScrapeSitemap(c *gin.Context) {
-	sitemapURL := c.Query("url")
-	if sitemapURL == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "url parameter is required"})
-		return
-	}
-
-	// Create a new collector.
-	collector := colly.NewCollector(colly.AllowedDomains())
-
 	response := utils.APIResponse[[]URL]{
 		Error:  "",
 		Status: http.StatusOK,
 		Data:   []URL{},
 	}
+
+	sitemapURL := c.Query("url")
+
+	if sitemapURL == "" {
+		response.Status = http.StatusBadRequest
+		response.Error = "url parameter is required"
+		c.JSON(http.StatusBadRequest, response)
+		c.Abort()
+		return
+	}
+
+	// Create a new collector.
+	collector := colly.NewCollector(colly.AllowedDomains())
 
 	var urls []URL
 
@@ -54,8 +57,10 @@ func ScrapeSitemap(c *gin.Context) {
 		var sitemap URLSet
 		err := xml.Unmarshal(r.Body, &sitemap)
 		if err != nil {
-			log.Printf("Failed to unmarshal XML: %v", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse sitemap XML"})
+			response.Status = http.StatusBadRequest
+			response.Error = "Failed to parse sitemap XML: " + err.Error()
+			c.JSON(http.StatusBadRequest, response)
+			c.Abort()
 			return
 		}
 		urls = sitemap.URLs
@@ -65,8 +70,8 @@ func ScrapeSitemap(c *gin.Context) {
 	err := collector.Visit(sitemapURL)
 	if err != nil {
 		response.Error = "Failed to parse sitemap XML" + err.Error()
-		response.Status = http.StatusInternalServerError
-		c.JSON(http.StatusInternalServerError, response)
+		response.Status = http.StatusBadRequest
+		c.JSON(http.StatusBadRequest, response)
 		c.Abort()
 		return
 	}
@@ -78,8 +83,8 @@ func ScrapeSitemap(c *gin.Context) {
 	jsonData, err := json.MarshalIndent(urls, "", "  ")
 	if err != nil {
 		response.Error = "Failed to marshal JSON due to " + err.Error()
-		response.Status = http.StatusInternalServerError
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to marshal JSON"})
+		response.Status = http.StatusBadRequest
+		c.JSON(http.StatusBadRequest, response)
 		c.Abort()
 		return
 	}
@@ -89,7 +94,7 @@ func ScrapeSitemap(c *gin.Context) {
 	if err != nil {
 		response.Error = "Failed to marshal JSON due to " + err.Error()
 		response.Status = http.StatusInternalServerError
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to marshal JSON"})
+		c.JSON(http.StatusInternalServerError, response)
 		c.Abort()
 		return
 	}

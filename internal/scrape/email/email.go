@@ -11,27 +11,29 @@ import (
 // ScrapeEmail godoc
 //
 //	@Summary		Get the email list
-//	@Description	Return sitemap url list.
 //	@Tags			email
 //	@Router			/api/v1/email [get]
 //	@Param			url	query	string	true	"url"
 //	@Response		200	{object} utils.APIResponse[[]string]
 //	@Produce		application/json
 func ScrapeEmail(c *gin.Context) {
-	url := c.Query("url")
-	if url == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "url parameter is required"})
-		return
-	}
-
-	// Create a new collector.
-	collector := colly.NewCollector(colly.AllowURLRevisit())
-
 	response := utils.APIResponse[[]string]{
 		Error:  "",
 		Status: http.StatusOK,
 		Data:   []string{},
 	}
+
+	url := c.Query("url")
+
+	if url == "" {
+		response.Status = http.StatusBadRequest
+		response.Error = "url parameter is required"
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	// Create a new collector.
+	collector := colly.NewCollector(colly.AllowURLRevisit())
 
 	collector.OnResponse(func(r *colly.Response) {
 		response.Data = extractUniqueEmails(string(r.Body))
@@ -41,7 +43,7 @@ func ScrapeEmail(c *gin.Context) {
 	err := collector.Visit(url)
 	if err != nil {
 		response.Error = "Failed to visit the url due to: " + err.Error()
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to visit url"})
+		c.JSON(http.StatusInternalServerError, response)
 		c.Abort()
 		return
 	}
