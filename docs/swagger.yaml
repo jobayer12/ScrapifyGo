@@ -42,7 +42,6 @@ info:
 paths:
   /api/v1/email:
     get:
-      description: Return sitemap url list.
       parameters:
       - description: url
         in: query
@@ -80,7 +79,6 @@ paths:
       - sitemap
   /api/v1/url:
     get:
-      description: Return sitemap url list.
       parameters:
       - description: url
         in: query
@@ -94,7 +92,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string'
-      summary: Get the sitemap url list
+      summary: Get the url list
       tags:
       - url
 swagger: "2.0"

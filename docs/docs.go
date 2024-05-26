@@ -17,7 +17,6 @@ const docTemplate = `{
     "paths": {
         "/api/v1/email": {
             "get": {
-                "description": "Return sitemap url list.",
                 "produces": [
                     "application/json"
                 ],
@@ -75,14 +74,13 @@ const docTemplate = `{
         },
         "/api/v1/url": {
             "get": {
-                "description": "Return sitemap url list.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "url"
                 ],
-                "summary": "Get the sitemap url list",
+                "summary": "Get the url list",
                 "parameters": [
                     {
                         "type": "string",
