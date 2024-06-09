@@ -15,6 +15,34 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/amazon": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "amazon"
+                ],
+                "summary": "Get the amazon product details",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-internal_scrape_amazon_Product"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/email": {
             "get": {
                 "produces": [
@@ -24,6 +52,34 @@ const docTemplate = `{
                     "email"
                 ],
                 "summary": "Get the email list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/google": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "google"
+                ],
+                "summary": "Get the google search list",
                 "parameters": [
                     {
                         "type": "string",
@@ -133,6 +189,49 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
+                }
+            }
+        },
+        "github_com_jobayer12_ScrapifyGo_utils.APIResponse-internal_scrape_amazon_Product": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/internal_scrape_amazon.Product"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_scrape_amazon.Product": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "price": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "totalRating": {
+                    "type": "string"
                 }
             }
         },

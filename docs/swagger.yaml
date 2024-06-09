@@ -22,6 +22,34 @@ definitions:
       status:
         type: integer
     type: object
+  github_com_jobayer12_ScrapifyGo_utils.APIResponse-internal_scrape_amazon_Product:
+    properties:
+      data:
+        $ref: '#/definitions/internal_scrape_amazon.Product'
+      error:
+        type: string
+      status:
+        type: integer
+    type: object
+  internal_scrape_amazon.Product:
+    properties:
+      description:
+        items:
+          type: string
+        type: array
+      images:
+        items:
+          type: string
+        type: array
+      price:
+        type: string
+      rating:
+        type: string
+      title:
+        type: string
+      totalRating:
+        type: string
+    type: object
   internal_scrape_sitemap.URL:
     properties:
       changefreq:
@@ -40,6 +68,24 @@ info:
   title: Scrape API
   version: "1.0"
 paths:
+  /api/v1/amazon:
+    get:
+      parameters:
+      - description: url
+        in: query
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-internal_scrape_amazon_Product'
+      summary: Get the amazon product details
+      tags:
+      - amazon
   /api/v1/email:
     get:
       parameters:
@@ -58,6 +104,24 @@ paths:
       summary: Get the email list
       tags:
       - email
+  /api/v1/google:
+    get:
+      parameters:
+      - description: url
+        in: query
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string'
+      summary: Get the google search list
+      tags:
+      - google
   /api/v1/sitemap:
     get:
       description: 'Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml'
