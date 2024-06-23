@@ -62,7 +62,7 @@ func main() {
 	}
 }
 
-// PrometheusMiddleware is the equivalent middleware for Gin
+// PrometheusMiddleware is the equivalent middleware
 func PrometheusMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if c.FullPath() == "/metrics" {
