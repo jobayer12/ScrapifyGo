@@ -71,6 +71,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/google": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "google"
+                ],
+                "summary": "Get the google search list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sitemap": {
             "get": {
                 "description": "Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml",
@@ -227,7 +255,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "slight-tiffie-splendid-1fcf1fda.koyeb.app",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Scrape API",

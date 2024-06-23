@@ -59,7 +59,7 @@ definitions:
       priority:
         type: string
     type: object
-host: localhost:8080
+host: slight-tiffie-splendid-1fcf1fda.koyeb.app
 info:
   contact: {}
   description: List of Scrape API
@@ -102,6 +102,24 @@ paths:
       summary: Get the email list
       tags:
       - email
+  /api/v1/google:
+    get:
+      parameters:
+      - description: url
+        in: query
+        name: url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string'
+      summary: Get the google search list
+      tags:
+      - google
   /api/v1/sitemap:
     get:
       description: 'Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml'
