@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "slight-tiffie-splendid-1fcf1fda.koyeb.app",
+    "host": "localhost:8080",
     "basePath": "/",
     "paths": {
         "/api/v1/amazon": {
@@ -21,7 +21,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "url",
+                        "description": "amazon product url",
                         "name": "url",
                         "in": "query",
                         "required": true
@@ -46,34 +46,6 @@
                     "email"
                 ],
                 "summary": "Get the email list",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "url",
-                        "name": "url",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/google": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "google"
-                ],
-                "summary": "Get the google search list",
                 "parameters": [
                     {
                         "type": "string",
@@ -204,10 +176,7 @@
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "type": "string"
                 },
                 "images": {
                     "type": "array",

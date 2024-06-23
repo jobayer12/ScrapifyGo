@@ -7,6 +7,7 @@ import (
 	"github.com/gocolly/colly"
 	"github.com/jobayer12/ScrapifyGo/utils"
 	_ "github.com/jobayer12/ScrapifyGo/utils"
+	"log/slog"
 	"net/http"
 )
 
@@ -50,6 +51,10 @@ func ScrapeSitemap(c *gin.Context) {
 	// Create a new collector.
 	collector := colly.NewCollector(colly.AllowedDomains())
 
+	collector.OnRequest(func(r *colly.Request) {
+		r.Headers.Set("User-Agent", utils.GetRandomUserAgent())
+	})
+
 	var urls []URL
 
 	// On XML response, parse the XML.
@@ -69,6 +74,7 @@ func ScrapeSitemap(c *gin.Context) {
 	// Visit the sitemap url.
 	err := collector.Visit(sitemapURL)
 	if err != nil {
+		slog.Error(err.Error())
 		response.Error = "Failed to parse sitemap XML" + err.Error()
 		response.Status = http.StatusBadRequest
 		c.JSON(http.StatusBadRequest, response)

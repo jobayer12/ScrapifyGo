@@ -27,7 +27,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "url",
+                        "description": "amazon product url",
                         "name": "url",
                         "in": "query",
                         "required": true
@@ -52,34 +52,6 @@ const docTemplate = `{
                     "email"
                 ],
                 "summary": "Get the email list",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "url",
-                        "name": "url",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/google": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "google"
-                ],
-                "summary": "Get the google search list",
                 "parameters": [
                     {
                         "type": "string",
@@ -210,10 +182,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "type": "string"
                 },
                 "images": {
                     "type": "array",
@@ -258,7 +227,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "slight-tiffie-splendid-1fcf1fda.koyeb.app",
+	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Scrape API",

@@ -34,9 +34,7 @@ definitions:
   internal_scrape_amazon.Product:
     properties:
       description:
-        items:
-          type: string
-        type: array
+        type: string
       images:
         items:
           type: string
@@ -61,7 +59,7 @@ definitions:
       priority:
         type: string
     type: object
-host: slight-tiffie-splendid-1fcf1fda.koyeb.app
+host: localhost:8080
 info:
   contact: {}
   description: List of Scrape API
@@ -71,7 +69,7 @@ paths:
   /api/v1/amazon:
     get:
       parameters:
-      - description: url
+      - description: amazon product url
         in: query
         name: url
         required: true
@@ -104,24 +102,6 @@ paths:
       summary: Get the email list
       tags:
       - email
-  /api/v1/google:
-    get:
-      parameters:
-      - description: url
-        in: query
-        name: url
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/github_com_jobayer12_ScrapifyGo_utils.APIResponse-array_string'
-      summary: Get the google search list
-      tags:
-      - google
   /api/v1/sitemap:
     get:
       description: 'Return sitemap url list. Example of the sitemap url: https://www.shopify.com/sitemap.xml'

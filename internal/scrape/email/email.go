@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gocolly/colly"
 	utils "github.com/jobayer12/ScrapifyGo/utils"
+	"log/slog"
 	"net/http"
 	"regexp"
 )
@@ -35,6 +36,10 @@ func ScrapeEmail(c *gin.Context) {
 	// Create a new collector.
 	collector := colly.NewCollector(colly.AllowURLRevisit())
 
+	collector.OnRequest(func(r *colly.Request) {
+		r.Headers.Set("User-Agent", utils.GetRandomUserAgent())
+	})
+
 	collector.OnResponse(func(r *colly.Response) {
 		response.Data = extractUniqueEmails(string(r.Body))
 	})
@@ -42,6 +47,7 @@ func ScrapeEmail(c *gin.Context) {
 	// Visit the sitemap url.
 	err := collector.Visit(url)
 	if err != nil {
+		slog.Error(err.Error())
 		response.Error = "Failed to visit the url due to: " + err.Error()
 		c.JSON(http.StatusInternalServerError, response)
 		c.Abort()

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gocolly/colly"
 	utils "github.com/jobayer12/ScrapifyGo/utils"
+	"log/slog"
 	"net/http"
 )
 
@@ -33,6 +34,9 @@ func UrlScrape(c *gin.Context) {
 	// Create a new collector.
 	collector := colly.NewCollector()
 
+	collector.OnRequest(func(r *colly.Request) {
+		r.Headers.Set("User-Agent", utils.GetRandomUserAgent())
+	})
 	// OnHTML callback to scrape the URLs.
 	collector.OnHTML("html", func(e *colly.HTMLElement) {
 		links := e.ChildAttrs("a", "href")
@@ -46,6 +50,7 @@ func UrlScrape(c *gin.Context) {
 	// Visit the url.
 	err := collector.Visit(url)
 	if err != nil {
+		slog.Error(err.Error())
 		response.Status = http.StatusBadRequest
 		response.Error = "Failed to visit the url due to: " + err.Error()
 		c.JSON(http.StatusBadRequest, response)

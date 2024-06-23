@@ -1,4 +1,4 @@
-package google
+package search
 
 import (
 	"fmt"
@@ -8,14 +8,6 @@ import (
 	"net/http"
 )
 
-// ScrapeGoogleSearch godoc
-//
-//	@Summary		Get the google search list
-//	@Tags			google
-//	@Router			/api/v1/google [get]
-//	@Param			url	query	string	true	"url"
-//	@Response		200	{object} utils.APIResponse[[]string]
-//	@Produce		application/json
 func ScrapeGoogleSearch(c *gin.Context) {
 
 	response := utils.APIResponse[[]string]{
@@ -33,15 +25,12 @@ func ScrapeGoogleSearch(c *gin.Context) {
 	}
 
 	// Create a new collector.
-	collector := colly.NewCollector(colly.AllowURLRevisit(), colly.AllowedDomains("google.com", "https://www.google.com", "www.google.com"))
+	domains := "https://www.google.com"
+	collector := colly.NewCollector(colly.AllowURLRevisit(), colly.AllowedDomains(domains))
 
 	collector.OnHTML(".MjjYud", func(e *colly.HTMLElement) {
 		fmt.Println(e.Text)
 	})
-
-	//collector.OnResponse(func(r *colly.Response) {
-	//	fmt.Println()
-	//})
 
 	collector.Visit(url)
 	collector.Wait()
