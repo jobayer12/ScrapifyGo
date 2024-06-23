@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/jobayer12/ScrapifyGo/docs"
 	"github.com/jobayer12/ScrapifyGo/internal/routes"
+	"github.com/jobayer12/ScrapifyGo/logger"
 	"github.com/jobayer12/ScrapifyGo/middleware"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -33,8 +34,8 @@ var (
 
 func init() {
 	prometheus.MustRegister(httpDuration, responseStatus, totalRequests)
-	// gin.SetMode(gin.ReleaseMode)
-	//slog.SetDefault(logger.Logger())
+	gin.SetMode(gin.ReleaseMode)
+	slog.SetDefault(logger.Logger())
 	server = gin.Default()
 	server.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
@@ -43,7 +44,7 @@ func init() {
 // @title			Scrape API
 // @version		1.0
 // @description	List of Scrape API
-// @host			localhost:8080
+// @host			slight-tiffie-splendid-1fcf1fda.koyeb.app
 // @BasePath		/
 func main() {
 	server.Use(PrometheusMiddleware())
@@ -53,9 +54,7 @@ func main() {
 		api.Use(middleware.URLMiddleware())
 		routes.Routes(api.Group("v1"))
 	}
-	//for _, item := range server.Routes() {
-	//	println("method:", item.Method, "path:", item.Path)
-	//}
+
 	err := server.Run(":8080")
 	if err != nil {
 		slog.Error(err.Error())
